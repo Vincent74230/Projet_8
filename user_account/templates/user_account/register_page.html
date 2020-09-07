@@ -5,8 +5,7 @@
         <div class="container h-100">
             <div class="row h-100 align-items-center justify-content-center text-center">
                 <div class="col-lg-10 align-self-end">
-                    <h1 class="text-uppercase text-white font-weight-bold">Ahoy</h1>
-                    <h1 class="text-uppercase text-white font-weight-bold">{{request.user.first_name}}</h1>
+                    <h1 class="text-uppercase text-white font-weight-bold">Créer un compte</h1>
                     <hr class="divider my-4" />
                 </div>
             </div>
@@ -17,8 +16,11 @@
         <div class='container'>
             <div class="row h-100 align-items-center justify-content-center text-center">
                 <div class=col-lg-10>
-                    <span><h1>Mon mail</h1></span>
-                    <span><h1>{{request.user.email}}</h1></span>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {{RegisterForm.as_p}}
+                        <input type="submit">
+                    </form>
                 </div>
             </div>
         </div>

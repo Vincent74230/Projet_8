@@ -29,16 +29,29 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto my-2 my-lg-0">
                     <li class = "nav-item">
-                    <form method = "post" action = "search/">
+                    <form method = "post" action = "search/" name = "userQuestion">
                     {% csrf_token %}
-                    {{form}}
-                    <input type="submit" value="chercher">
+                    <input placeholder="Tapez le nom d'un aliment">
+                    <button>Chercher</button>
                     </form>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#my_account" title = "Mon compte"><img src="{%static 'home/images/my_account.png'%}"></a></li>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                    {% if request.user.first_name %}
+                    <li class = "nav-item"><span class="nav-link js-scroll-trigger">Bonjour,{{request.user.first_name}}</span></li>
+                    {% else %}
+                    <li class = "nav-item"><span class="nav-link js-scroll-trigger">Bonjour,{{request.user}}</span></li>
+                    {% endif %}
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'user_account' %}" title="Mon compte">
+                    <i class="fas fa-user fa-2x"></i></a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#my_food" title="Mes aliments">
-                    <img src="{%static 'home/images/my_food.png'%}"></a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#log_out" title="Me déconnecter">
-                    <img src="{%static 'home/images/logout.png'%}"></a></li>
+                    <i class="fas fa-carrot fa-2x"></i></a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'logout' %}" title="Se déconnecter">
+                    <i class="fas fa-sign-out-alt fa-2x"></i></a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'sign_in' %}" title = "Créer un compte"><i class="fas fa-user fa-2x"></i></a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'login' %}" title="Se connecter">
+                    <i class="fas fa-sign-in-alt fa-2x"></i></a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
