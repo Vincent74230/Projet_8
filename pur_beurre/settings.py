@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'vincentnow-purbeurre.herokuapp.com',
 # Application definition
 
 INSTALLED_APPS = [
+    'search.apps.SearchConfig',
     'user_account.apps.UserAccountConfig',
     'home.apps.HomeConfig',
     'django.contrib.admin',
