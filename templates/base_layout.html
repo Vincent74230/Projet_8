@@ -29,9 +29,9 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto my-2 my-lg-0">
                     <li class = "nav-item">
-                    <form method = "post" action = "search/" name = "userQuestion">
+                    <form method="post" action="{% url 'search_index' %}">
                     {% csrf_token %}
-                    <input placeholder="Tapez le nom d'un aliment">
+                    <input type='text' placeholder="Quel aliment remplacer?" name='UserQuestion'></input>
                     <button>Chercher</button>
                     </form>
                     </li>
