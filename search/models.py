@@ -1,18 +1,12 @@
 from django.db import models
-#from django.contrib.auth.models import User
-'''
-class Products(models.Model):
-    barcode = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=35)
-    category = models.CharField(max_length=40)
-    nutriscore = models.CharField(max_length=5)
-'''
+from django.contrib.auth.models import User
 
-'''
-class FoodStuffs(models.Model):
-    barcode = models.IntegerField(primary_key=True)
-    stuff_name = models.CharField(max_length=35)
-    stuff_category = models.CharField(max_length=35)
+class Products(models.Model):
+    barcode = models.BigIntegerField(primary_key=True)
+    category = models.CharField(max_length=25)
+    name = models.CharField(max_length=120)
     nutriscore = models.CharField(max_length=5)
     favourites = models.ManyToManyField(User)
-'''
+
+    def __str__(self):
+        return self.name
