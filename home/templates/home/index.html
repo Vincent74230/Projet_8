@@ -13,8 +13,8 @@
                         <p class="text-white-75 font-weight-light mb-5">Trouvez un produit de substitution pour ceux que vous consommez tous les jours</p>
                         <form method="post" action="{% url 'search_index' %}">
                         {% csrf_token %}
-                        {{form}}
-                        <input type="submit" value="chercher">
+                        <input type='text' placeholder="Quel aliment remplacer?" name='UserQuestion'></input>
+                        <button>Chercher</button>
                         </form>
                     </div>
                 </div>

@@ -5,11 +5,11 @@ from django.core.management.base import BaseCommand, CommandError
 from search.models import Products
 import requests
 from requests.exceptions import HTTPError, ConnectionError
-
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 
 CATEGORIES = ['fr:Pâtes à tartiner','Ice creams and sorbets','Sodas','Crisps']
 NUTRISCORES = ['a', 'b', 'c', 'd', 'e']
-
 
 class Command(BaseCommand):#Custom django-admin command, fetches and login datas from OFF server
     help = 'Fetches datas from openfoodfacts database and logs into server database'
@@ -47,9 +47,29 @@ class Command(BaseCommand):#Custom django-admin command, fetches and login datas
 
                 for item in response:
                     try:
-                        query = Products(barcode=item['id'], category=category, name=item['product_name'], nutriscore=item['nutrition_grades'])
+                        #We want to check if the provided url is correct
+                        url_validator = URLValidator()
+                        url_validator(item['image_small_url'])
+                        #Let's try to log this on DB
+                        query = Products(
+                            barcode=item['id'], 
+                            image=item['image_small_url'], 
+                            category=item['categories'], 
+                            name=item['product_name'], 
+                            nutriscore=item['nutrition_grades']
+                            )
                         query.save()
                     except KeyError:
                         pass
+                    except ValidationError:
+                        query = Products(
+                            barcode=item['id'], 
+                            image=None, 
+                            category=item['categories'], 
+                            name=item['product_name'], 
+                            nutriscore=item['nutrition_grades']
+                            )
+                        query.save()
+
             print ("Extraction of {} category, done.".format(category))
         print("Extraction DONE. Dabatbase up-to-date")

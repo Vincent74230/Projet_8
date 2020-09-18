@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 
 class Products(models.Model):
     barcode = models.BigIntegerField(primary_key=True)
-    category = models.CharField(max_length=25)
+    image = models.URLField(null=True, default=None, blank=True)
     name = models.CharField(max_length=120)
+    category = models.TextField(null=True, default=None, blank=True)
     nutriscore = models.CharField(max_length=5)
     favourites = models.ManyToManyField(User)
 
