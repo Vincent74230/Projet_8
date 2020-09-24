@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from . models import Products
 
 
-
 def index(request):
     context={}
     if request.method == 'POST':
