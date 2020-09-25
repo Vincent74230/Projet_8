@@ -20,8 +20,8 @@
             {% for element in substitutes %}
             <div class="col-lg-4 text-center">
                 <div class="mt-5">
-                    <img src={{element}}>
-                    <p class="text-muted mb-0"></p>
+                    <a href="{% url 'search_detail' UserChoice=element.pk%}"><img src={{element.image}}></a>
+                    <p class="text-muted mb-0">{{element.name}}</p>
                 </div>
             </div>
             {% endfor %}

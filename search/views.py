@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from . models import Products
+import openfoodfacts
 
 
 def index(request):
@@ -17,16 +18,20 @@ def index(request):
             substitutes = substitutes.filter(nutriscore='c')
             substitutes_list = []
             for element in substitutes:
-                element = element.image
                 substitutes_list.append(element)
-
-            print(substitutes_list)
 
             context = {'UserQuestion':result.name, 'Image':result.image, 'substitutes':substitutes_list}
         except IndexError:
             context={'UserQuestion':'Pas de résultats... Tapez une autre demande'}
 
-
-
-
     return render(request, 'search/index.html', context)
+
+def detail(request, UserChoice):
+    product = Products.objects.filter(barcode=UserChoice)
+    product=product[0]
+    infos = openfoodfacts.products.get_product(UserChoice)
+    infos = infos['product']
+
+    context = {'product':product, 'infos':infos}
+
+    return render (request, 'search/detail.html', context)

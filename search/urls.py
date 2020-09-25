@@ -3,5 +3,6 @@ from . import views
 
 
 urlpatterns = [
-    path("", views.index, name='search_index'),   
+    path("", views.index, name='search_index'),  
+    path("<str:UserChoice>/", views.detail, name='search_detail') 
 ]
