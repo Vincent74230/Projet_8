@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from . models import Products
+from django.contrib.auth.models import User
 import openfoodfacts
 
 
@@ -35,3 +36,14 @@ def detail(request, UserChoice):
     context = {'product':product, 'infos':infos}
 
     return render (request, 'search/detail.html', context)
+
+def register_substitute(request, UserChoice, UserId):
+    user = User.objects.filter(id=UserId)
+    user = user[0]
+    favourite_product = Products.objects.filter(barcode=UserChoice)
+    favourite_product = favourite_product[0]
+    favourite_product.favourites.add(user)
+
+    print(favourite_product)
+
+    return HttpResponse (user, favourite_product)
