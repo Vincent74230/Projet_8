@@ -53,6 +53,14 @@
                             <th scope="row">Lipides pour 100 g</th>
                             <td>{{infos.nutriments.fat}} g</td>
                         </tr>
+                        {% if request.user.is_authenticated %}
+                        <tr>
+                            <th scope="row"></th>
+                        </tr>
+                        <tr>
+                            <th scope="row"><a href="{% url 'search_register_substitute' UserChoice=product.pk UserId=request.user.pk %}"><button type="button" class="btn btn-primary btn-lg">Enregistrer</button></a></th>
+                        </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>

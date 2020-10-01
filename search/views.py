@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, reverse
+from django.http import HttpResponseRedirect
 from . models import Products
 from django.contrib.auth.models import User
 import openfoodfacts
@@ -44,6 +44,13 @@ def register_substitute(request, UserChoice, UserId):
     favourite_product = favourite_product[0]
     favourite_product.favourites.add(user)
 
-    print(favourite_product)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-    return HttpResponse (user, favourite_product)
+def favourites(request, UserId):
+    fav = Products.objects.filter(favourites=UserId)
+    user_favourites=[]
+    for element in fav:
+        user_favourites.append(element)
+    context={'user_favourites':user_favourites}
+
+    return render (request, 'search/my_food.html', context)
