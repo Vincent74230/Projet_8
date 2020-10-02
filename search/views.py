@@ -1,5 +1,5 @@
-from django.shortcuts import render, reverse
-from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.http import Http404
 from . models import Products
 from django.contrib.auth.models import User
 import openfoodfacts
@@ -28,29 +28,36 @@ def index(request):
     return render(request, 'search/index.html', context)
 
 def detail(request, UserChoice):
-    product = Products.objects.filter(barcode=UserChoice)
-    product=product[0]
-    infos = openfoodfacts.products.get_product(UserChoice)
-    infos = infos['product']
-
-    context = {'product':product, 'infos':infos}
+    
+    product = get_object_or_404(Products, barcode=UserChoice)
+    try:
+        infos = openfoodfacts.products.get_product(UserChoice)
+        infos = infos['product']
+        context = {'product':product, 'infos':infos}
+    except:
+        raise Http404("La page demandée n'existe pas")
 
     return render (request, 'search/detail.html', context)
 
 def register_substitute(request, UserChoice, UserId):
-    user = User.objects.filter(id=UserId)
-    user = user[0]
-    favourite_product = Products.objects.filter(barcode=UserChoice)
-    favourite_product = favourite_product[0]
-    favourite_product.favourites.add(user)
-
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    if request.user.is_authenticated:
+        user = User.objects.filter(id=UserId)
+        user = user[0]
+        favourite_product = Products.objects.filter(barcode=UserChoice)
+        favourite_product = favourite_product[0]
+        favourite_product.favourites.add(user)
+        return render(request, 'search/register_fav_ok.html', {})
+    else:
+        return render(request, 'search/access_denied.html', {})
 
 def favourites(request, UserId):
-    fav = Products.objects.filter(favourites=UserId)
-    user_favourites=[]
-    for element in fav:
-        user_favourites.append(element)
-    context={'user_favourites':user_favourites}
+    if request.user.is_authenticated:
+        fav = Products.objects.filter(favourites=UserId)
+        user_favourites=[]
+        for element in fav:
+            user_favourites.append(element)
+        context={'user_favourites':user_favourites}
+        return render (request, 'search/my_food.html', context)
 
-    return render (request, 'search/my_food.html', context)
+    else:
+        return render(request, 'search/access_denied.html', {})
