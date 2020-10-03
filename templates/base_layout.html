@@ -32,7 +32,7 @@
                     <form method="post" action="{% url 'search_index' %}">
                     {% csrf_token %}
                     <input type='text' placeholder="Quel aliment remplacer?" name='UserQuestion'></input>
-                    <button>Chercher</button>
+                    <button class="btn btn-primary btn">Chercher</button>
                     </form>
                     </li>
                     {% if request.user.is_authenticated %}
@@ -48,7 +48,7 @@
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'logout' %}" title="Se déconnecter">
                     <i class="fas fa-sign-out-alt fa-2x"></i></a></li>
                     {% else %}
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'sign_in' %}" title = "Créer un compte"><i class="fas fa-user fa-2x"></i></a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'sign_in' %}" title = "Créer un compte"><i class="fas fa-user-plus fa-2x"></i></a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'login' %}" title="Se connecter">
                     <i class="fas fa-sign-in-alt fa-2x"></i></a></li>
                     {% endif %}

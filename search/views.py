@@ -10,11 +10,11 @@ def index(request):
     if request.method == 'POST':
         user_question = request.POST.get('UserQuestion')
         try:
-            result = Products.objects.filter(name__iexact=user_question)
+            result = Products.objects.filter(name__icontains=user_question)
             result = result[0]
             categories = result.category
             cat = categories.split(',')
-            cat = cat[0]
+            cat = cat[2]
             substitutes = Products.objects.filter(category__icontains=cat)
             substitutes = substitutes.filter(nutriscore='c')
             substitutes_list = []
