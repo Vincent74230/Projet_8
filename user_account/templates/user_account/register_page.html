@@ -18,10 +18,40 @@
                 <div class=col-lg-10>
                     <form action="" method="post">
                         {% csrf_token %}
-                        {{RegisterForm.as_p}}
+                    <table class="table">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Nom d'utilisateur</th>
+                            <td>{{RegisterForm.username}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Prénom</th>
+                            <td>{{RegisterForm.first_name}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Nom</th>
+                            <td>{{RegisterForm.last_name}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Email</th>
+                            <td>{{RegisterForm.email}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Mot de passe</th>
+                            <td>{{RegisterForm.password1}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Confirmation mot de passe</th>
+                            <td>{{RegisterForm.password2}}</td>
+                        </tr>
+                    </tbody>
+                    </table>
                         <input type="submit">
                     </form>
+                    
+                    <p>Vous avez déjà un compte?    <a href="{% url 'login' %}"><button type="button" class="btn btn-primary btn-lg">Login</button></a>  </p>
                 </div>
+
             </div>
         </div>
     </section>

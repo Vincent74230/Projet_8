@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from . forms import UserQuestion, RegisterForm, LoginForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
 
 def index(request):
@@ -8,13 +9,12 @@ def index(request):
     return render(request, 'user_account/index.html', context)
 
 def register_page(request):
-    QuestionForm = UserQuestion()
     Registration = RegisterForm()
     if request.method == 'POST':
         form = RegisterForm(data=request.POST)
         if form.is_valid():
             form.save()
-    context = {'form':UserQuestion, 'RegisterForm':Registration}
+    context = {'RegisterForm':Registration}
     return render(request, 'user_account/register_page.html', context)
 
 def login_page(request):
