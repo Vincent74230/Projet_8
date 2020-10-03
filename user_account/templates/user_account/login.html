@@ -18,9 +18,21 @@
                 <div class=col-lg-10>
                     <form action="" method="post">
                         {% csrf_token %}
-                        {{LoginForm.as_p}}
+                        <table class="table">
+                            <tr>
+                                <th scope='row'>Nom d'utilisateur</th>
+                                <td> <input type="text" name="username"></td>
+                            </tr>
+                            <tr>
+                                <th scope='row'>Mot de passe</th>
+                                <td> <input type="password" name="password"></td>
+                            </tr>
+                        </table>
                         <input type="submit">
                     </form>
+                    {% for message in messages %}
+                    <p>{{message}}</p>
+                    {% endfor %}
                 </div>
             </div>
         </div>

@@ -1,24 +1,29 @@
 from django.shortcuts import render, redirect
-from . forms import UserQuestion, RegisterForm, LoginForm
+from . forms import RegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 
 def index(request):
-    context = {"form":UserQuestion}
-    return render(request, 'user_account/index.html', context)
+    context = {}
+    if request.user.is_authenticated:
+        return render(request, 'user_account/index.html', context)
+    else:
+        return redirect('/home')
 
 def register_page(request):
     Registration = RegisterForm()
     if request.method == 'POST':
-        form = RegisterForm(data=request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
+            user = form.cleaned_data.get('username')
+            messages.success(request, "Votre compte a bien été créé" + user)
+            return redirect ('login')
     context = {'RegisterForm':Registration}
     return render(request, 'user_account/register_page.html', context)
 
 def login_page(request):
-    Login = LoginForm()
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -26,8 +31,10 @@ def login_page(request):
         if user is not None:
             login(request, user)
             return redirect('/home')
+        else:
+            messages.info(request, "Votre nom d'utilisateur ou mote de passe est incorrect")
 
-    context = {'LoginForm':Login}
+    context = {}
     return render(request, 'user_account/login.html', context)
 
 
