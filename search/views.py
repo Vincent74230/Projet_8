@@ -18,12 +18,10 @@ def index(request):
             cat = categories.split(',')
             cat = cat[-1]
             substitutes = Products.objects.filter(category__icontains=cat)
-            print (substitutes)
             for nutriscore in nutriscores:
                 sub = substitutes.filter(nutriscore=nutriscore)
                 for element in sub:
                     substitutes_list.append(element)
-            print (substitutes_list)
 
             context =  {'UserQuestion':result.name, 'Image':result.image, 'substitutes':substitutes_list}
         except IndexError:
