@@ -3,7 +3,6 @@ from django.http import Http404
 from . models import Products
 from django.contrib.auth.models import User
 import openfoodfacts
-from . fetch import Fetch
 
 
 def index(request):
