@@ -3,27 +3,32 @@ from django.http import Http404
 from . models import Products
 from django.contrib.auth.models import User
 import openfoodfacts
+from . fetch import Fetch
 
 
 def index(request):
-    context={}
+    context = {}
     if request.method == 'POST':
         user_question = request.POST.get('UserQuestion')
+        nutriscores=['a','b','c','d','e']
+        substitutes_list = []
         try:
             result = Products.objects.filter(name__icontains=user_question)
             result = result[0]
             categories = result.category
             cat = categories.split(',')
-            cat = cat[2]
+            cat = cat[-1]
             substitutes = Products.objects.filter(category__icontains=cat)
-            substitutes = substitutes.filter(nutriscore='c')
-            substitutes_list = []
-            for element in substitutes:
-                substitutes_list.append(element)
+            print (substitutes)
+            for nutriscore in nutriscores:
+                sub = substitutes.filter(nutriscore=nutriscore)
+                for element in sub:
+                    substitutes_list.append(element)
+            print (substitutes_list)
 
-            context = {'UserQuestion':result.name, 'Image':result.image, 'substitutes':substitutes_list}
+            context =  {'UserQuestion':result.name, 'Image':result.image, 'substitutes':substitutes_list}
         except IndexError:
-            context={'UserQuestion':'Pas de résultats... Tapez une autre demande'}
+            context =  {'UserQuestion':'Pas de résultats... Tapez une autre demande'}
 
     return render(request, 'search/index.html', context)
 
@@ -61,3 +66,27 @@ def favourites(request, UserId):
 
     else:
         return render(request, 'search/access_denied.html', {})
+
+'''
+def index(request):
+    context={}
+    if request.method == 'POST':
+        user_question = request.POST.get('UserQuestion')
+        try:
+            result = Products.objects.filter(name__icontains=user_question)
+            result = result[0]
+            categories = result.category
+            cat = categories.split(',')
+            cat = cat[-1]
+            substitutes = Products.objects.filter(category__icontains=cat)
+            #substitutes = substitutes.filter(nutriscore='c')
+            substitutes_list = []
+            for element in substitutes:
+                substitutes_list.append(element)
+
+            context = {'UserQuestion':result.name, 'Image':result.image, 'substitutes':substitutes_list}
+        except IndexError:
+            context={'UserQuestion':'Pas de résultats... Tapez une autre demande'}
+
+    return render(request, 'search/index.html', context)
+'''

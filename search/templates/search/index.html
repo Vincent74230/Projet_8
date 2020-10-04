@@ -21,6 +21,7 @@
             <div class="col-lg-4 text-center">
                 <div class="mt-5">
                     <p class="text-muted mb-0">{{element.name}}</p>
+                    <p class="text-muted mb-0">Nutriscore : {{element.nutriscore}}</p>
                     <a href="{% url 'search_detail' UserChoice=element.pk%}"><img src={{element.image}}></a>
                 {% if request.user.is_authenticated %}
                 </div>
