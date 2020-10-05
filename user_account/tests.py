@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-
+from django.contrib.auth.models import User
 
 
 class IndexPageTest(TestCase):
@@ -12,12 +12,9 @@ class LogoutTest(TestCase):
     def test_user_logout_redirect(self):
         response=self.client.get(reverse('logout'))
         self.assertEqual(response.status_code, 302)
-'''
-    def setUp(self):
-        user=
-'''
-class SignInTest(TestCase):
-    def test_sign_in(self):
+
+class SignUpTest(TestCase):
+    def test_sign_up(self):
         response=self.client.get('/user_account/sign_in')
         self.assertEqual(response.status_code, 200)
 
@@ -29,4 +26,23 @@ class SignInTest(TestCase):
             'email':'vince@gmail.com',
             'password':'Radeon74'
             })
+        self.assertEqual(response.status_code, 200)
+
+class LoginTest(TestCase):
+    def setUp(self):
+        fake_user = User.objects.create(
+            username='Vincent74',
+            password='Openclassrooms1'
+            )
+        fake_user.save()
+
+    def test_login_post(self):
+        response=self.client.post('/user_account/login', {
+            'username': 'Vincent74',
+            'password': 'Openclassrooms1'
+            })
+        self.assertEqual(response.status_code, 200)
+
+    def test_login_get(self):
+        response=self.client.get('/user_account/login')
         self.assertEqual(response.status_code, 200)
