@@ -10177,3 +10177,17 @@ header.mentions_head {
   background-attachment: scroll;
   background-size: cover;
 }
+
+.card{
+  position: relative;
+  padding-top: -20px;
+  display: inline-block;
+}
+
+.medallion{
+  position: absolute;
+  right : -20px;
+  text-align: center;
+  border-radius: 20px 20px 20px 20px;
+  padding: 5px 10px;
+}
