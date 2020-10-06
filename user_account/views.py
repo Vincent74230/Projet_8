@@ -15,13 +15,12 @@ def index(request):
 def register_page(request):
     Registration = RegisterForm()
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            user = form.cleaned_data.get('username')
+        Registration = RegisterForm(request.POST)
+        if Registration.is_valid():
+            Registration.save()
+            user = Registration.cleaned_data.get('username')
             messages.success(request, "Votre compte a bien été créé" + user)
             return redirect ('login')
-        else:
 
     context = {'RegisterForm':Registration}
     return render(request, 'user_account/register_page.html', context)
