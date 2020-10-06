@@ -31,7 +31,6 @@ def index(request):
     return render(request, 'search/index.html', context)
 
 def detail(request, UserChoice):
-    
     product = get_object_or_404(Products, barcode=UserChoice)
     try:
         infos = openfoodfacts.products.get_product(UserChoice)

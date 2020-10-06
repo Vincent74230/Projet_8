@@ -7,6 +7,7 @@ import unittest
 from unittest import mock
 
 
+
 class ExtractCustomCommandTest(TestCase):
     class MockRequestGet:
         def __init__(self, url, params=None, headers=None):
@@ -55,7 +56,7 @@ class SearchTestIndexPage(TestCase):
 
 class FavouriteTestPage(TestCase):
     def setUp(self):
-        fake_user = User(
+        fake_user = User.objects.create_user(
             username='Vincent74230',
             password='Testpassword1',
             first_name='Vincent',
@@ -63,12 +64,9 @@ class FavouriteTestPage(TestCase):
             email='vince@gmail.com'
             )
         fake_user.save()
-        
-    def test_favourite_page_no_user_id(self):
-        response = self.client.get("/search/favourites/")
-        self.assertEqual(response.status_code, 404)
+        self.client.login(username='Vincent74230', password='Testpassword1')
 
     def test_favourite_page_user_is_connected(self):
         self.client.login(username='Vincent74230', password='Testpassword1')
-        response = self.client.get("/search/favourites/1")
-        self.assertEqual(response.status_code, 302)
+        response = self.client.get(reverse("search_favourites"))
+        self.assertEqual(response.status_code, 200)
