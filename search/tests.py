@@ -64,7 +64,10 @@ class FavouriteTestPage(TestCase):
             email='vince@gmail.com'
             )
         fake_user.save()
-        self.client.login(username='Vincent74230', password='Testpassword1')
+
+    def test_favourite_page_anonymous_user(self):
+        response=self.client.get(reverse("search_favourites"))
+        self.assertEqual(response.status_code, 404)
 
     def test_favourite_page_user_is_connected(self):
         self.client.login(username='Vincent74230', password='Testpassword1')
