@@ -30,7 +30,7 @@
                 </div>
                 {% if request.user.is_authenticated %}
                 <div>
-                    <a href="{% url 'search_register_substitute' UserChoice=element.pk UserId=request.user.pk %}"><i class="fas fa-save fa-2x"title="enregistrer dans mes favoris"></i></a>
+                    <a href="{% url 'search_register_substitute' UserChoice=element.pk %}"><i class="fas fa-save fa-2x"title="enregistrer dans mes favoris"></i></a>
                 </div>
                 {% endif %}
             </div>
@@ -39,27 +39,3 @@
     </div>
     </section>
 {% endblock %}
-
-
-<!--
-    <section class="page-section" id="services">
-    <div class="container">
-        <div class="row">
-            {% for element in substitutes %}
-            <div class="col-lg-4 text-center">
-                <div class="mt-5">
-                    <p class="text-muted mb-0">{{element.name}}</p>
-                    <p class="text-muted mb-0">Nutriscore : {{element.nutriscore}}</p>
-                    <a href="{% url 'search_detail' UserChoice=element.pk%}"><img src={{element.image}}></a>
-                {% if request.user.is_authenticated %}
-                </div>
-                    <a href="{% url 'search_register_substitute' UserChoice=element.pk UserId=request.user.pk %}"><i class="fas fa-save fa-2x"title="enregistrer dans mes favoris"></i>
-                <div>
-                {% endif %}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    </section>
--->

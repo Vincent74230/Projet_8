@@ -43,26 +43,19 @@ def detail(request, UserChoice):
     return render (request, 'search/detail.html', context)
 
 @login_required
-def register_substitute(request, UserChoice, UserId):
-    if request.user.is_authenticated:
-        user = User.objects.filter(id=UserId)
-        user = user[0]
-        favourite_product = Products.objects.filter(barcode=UserChoice)
-        favourite_product = favourite_product[0]
-        favourite_product.favourites.add(user)
-        return render(request, 'search/register_fav_ok.html', {})
-    else:
-        return render(request, 'search/access_denied.html', {})
+def register_substitute(request, UserChoice):
+    user = User.objects.filter(id=request.user.id)
+    user = user[0]
+    favourite_product = Products.objects.filter(barcode=UserChoice)
+    favourite_product = favourite_product[0]
+    favourite_product.favourites.add(user)
+    return render(request, 'search/register_fav_ok.html', {})
 
 @login_required
-def favourites(request, UserId):
-    if request.user.is_authenticated:
-        fav = Products.objects.filter(favourites=UserId)
-        user_favourites=[]
-        for element in fav:
-            user_favourites.append(element)
-        context={'user_favourites':user_favourites}
-        return render (request, 'search/my_food.html', context)
-
-    else:
-        return render(request, 'search/access_denied.html', {})
+def favourites(request):
+    fav = Products.objects.filter(favourites=request.user.id)
+    user_favourites=[]
+    for element in fav:
+        user_favourites.append(element)
+    context={'user_favourites':user_favourites}
+    return render (request, 'search/my_food.html', context)
