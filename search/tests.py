@@ -1,10 +1,11 @@
 from django.test import TestCase
-from search.management.commands.extract import Command
-from django.core.management.base import BaseCommand, CommandError
+from django.urls import reverse
 from . models import Products
+from django.contrib.auth.models import User
 from django.core.management import call_command
 import unittest
 from unittest import mock
+
 
 class ExtractCustomCommandTest(TestCase):
     class MockRequestGet:
@@ -29,6 +30,12 @@ class ExtractCustomCommandTest(TestCase):
             'categories':'Sodas',
             'product_name':'Orangina',
             'nutrition_grades':'e'
+            },
+            {'id':'5000159407238',
+            'image_small_url':'hfeuihziuefh',
+            'categories':'Sodas',
+            'product_name':'Orangina',
+            'nutrition_grades':'e'
             }
             ]
             }
@@ -37,5 +44,31 @@ class ExtractCustomCommandTest(TestCase):
     def test_extract(self):
         call_command('extract')
         total = Products.objects.all()
-        self.assertEqual(2, len(total)) 
+        self.assertEqual(3, len(total)) 
         self.assertEqual('Coca-Cola', total[0].name)
+        self.assertEqual(None, total[2].image)
+
+class SearchTestIndexPage(TestCase):
+    def test_search_index_view(self):
+        response=self.client.get(reverse('search_index'))
+        self.assertEqual(response.status_code, 200)
+
+class FavouriteTestPage(TestCase):
+    def setUp(self):
+        fake_user = User(
+            username='Vincent74230',
+            password='Testpassword1',
+            first_name='Vincent',
+            last_name='VinceNow',
+            email='vince@gmail.com'
+            )
+        fake_user.save()
+        
+    def test_favourite_page_no_user_id(self):
+        response = self.client.get("/search/favourites/")
+        self.assertEqual(response.status_code, 404)
+
+    def test_favourite_page_user_is_connected(self):
+        self.client.login(username='Vincent74230', password='Testpassword1')
+        response = self.client.get("/search/favourites/1")
+        self.assertEqual(response.status_code, 302)

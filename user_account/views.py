@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from . forms import RegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -20,6 +21,8 @@ def register_page(request):
             user = form.cleaned_data.get('username')
             messages.success(request, "Votre compte a bien été créé" + user)
             return redirect ('login')
+        else:
+
     context = {'RegisterForm':Registration}
     return render(request, 'user_account/register_page.html', context)
 
@@ -38,6 +41,7 @@ def login_page(request):
     return render(request, 'user_account/login.html', context)
 
 
+@login_required
 def logoutUser(request):
     logout(request)
     return redirect('login')

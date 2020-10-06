@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from . models import Products
 from django.contrib.auth.models import User
@@ -41,6 +42,7 @@ def detail(request, UserChoice):
 
     return render (request, 'search/detail.html', context)
 
+@login_required
 def register_substitute(request, UserChoice, UserId):
     if request.user.is_authenticated:
         user = User.objects.filter(id=UserId)
@@ -52,6 +54,7 @@ def register_substitute(request, UserChoice, UserId):
     else:
         return render(request, 'search/access_denied.html', {})
 
+@login_required
 def favourites(request, UserId):
     if request.user.is_authenticated:
         fav = Products.objects.filter(favourites=UserId)
@@ -63,27 +66,3 @@ def favourites(request, UserId):
 
     else:
         return render(request, 'search/access_denied.html', {})
-
-'''
-def index(request):
-    context={}
-    if request.method == 'POST':
-        user_question = request.POST.get('UserQuestion')
-        try:
-            result = Products.objects.filter(name__icontains=user_question)
-            result = result[0]
-            categories = result.category
-            cat = categories.split(',')
-            cat = cat[-1]
-            substitutes = Products.objects.filter(category__icontains=cat)
-            #substitutes = substitutes.filter(nutriscore='c')
-            substitutes_list = []
-            for element in substitutes:
-                substitutes_list.append(element)
-
-            context = {'UserQuestion':result.name, 'Image':result.image, 'substitutes':substitutes_list}
-        except IndexError:
-            context={'UserQuestion':'Pas de résultats... Tapez une autre demande'}
-
-    return render(request, 'search/index.html', context)
-'''
