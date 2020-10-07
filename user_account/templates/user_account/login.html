@@ -28,11 +28,12 @@
                                 <td> <input type="password" name="password"></td>
                             </tr>
                         </table>
-                        <input type="submit">
+                        <button class= "btn btn-primary btn">Envoyer</button>
                     </form>
                     {% for message in messages %}
                     <p>{{message}}</p>
                     {% endfor %}
+                    </br></br>
                     <p>Vous souhaitez créer un compte?<a href="{% url 'sign_in' %}"><button type="button" class="btn btn-primary btn-lg">Créer un compte</button></a></p>
                 </div>
             </div>
