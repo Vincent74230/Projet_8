@@ -49,6 +49,7 @@ class ExtractCustomCommandTest(TestCase):
         self.assertEqual('Coca-Cola', total[0].name)
         self.assertEqual(None, total[2].image)
 
+
 class SearchIndexPageTestCase(TestCase):
     def test_search_index_view(self):
         response=self.client.get(reverse('search_index'))
@@ -81,4 +82,38 @@ class SearchFavouriteTestCase(TestCase):
     def test_favourite_page_anonymous_user(self):
         self.client.logout()
         response = self.client.get(reverse("search_favourites"))
+        self.assertEqual(response.status_code, 302)
+
+class SearchRegisterSubstituteTestCase(TestCase):
+    def setUp(self):
+        fake_user = User.objects.create_user(
+            username='VincentTest',
+            password='Testpassword2',
+            )
+        fake_user.save()
+
+        fake_product = Products.objects.create(
+            barcode='3560070824458',
+            image='https://static.openfoodfacts.org/images/products/500/015/940/7236/front_fr.19.100.jpg',
+            category='Sodas',
+            name='Orangina',
+            nutriscore='e'
+            )
+        self.client.login(username='VincentTest', password='Testpassword2')
+
+    def test_register_sub_right_user_no_product(self):
+        response = self.client.get("/search/register_sub/")
+        self.assertEqual(response.status_code, 404)
+
+    def test_register_sub_right_user_right_product(self):
+        response = self.client.get("/search/register_sub/3560070824458")
+        self.assertEqual(response.status_code, 200)
+
+    def test_register_sub_right_user_wrong_product(self):
+        response = self.client.get("/search/register_sub/35600")
+        self.assertEqual(response.status_code, 404)
+
+    def test_register_sub_anonymousUser_right_product(self):
+        self.client.logout()
+        response = self.client.get("/search/register_sub/3560070824458")
         self.assertEqual(response.status_code, 302)

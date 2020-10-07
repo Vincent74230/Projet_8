@@ -8,11 +8,6 @@ class IndexPageTest(TestCase):
         response=self.client.get(reverse('user_account'))
         self.assertEqual(response.status_code, 302)
 
-class LogoutTest(TestCase):
-    def test_user_logout_redirect(self):
-        response=self.client.get(reverse('logout'))
-        self.assertEqual(response.status_code, 302)
-
 class SignUpTest(TestCase):
     def test_sign_up(self):
         response=self.client.get('/user_account/sign_in')
@@ -46,3 +41,7 @@ class LoginTest(TestCase):
     def test_login_get(self):
         response=self.client.get('/user_account/login')
         self.assertEqual(response.status_code, 200)
+
+    def test_logout(self):
+        response=self.client.get(reverse('logout'))
+        self.assertEqual(response.status_code, 302)
