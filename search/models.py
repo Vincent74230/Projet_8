@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Products(models.Model):
     barcode = models.BigIntegerField(primary_key=True)
     image = models.URLField(null=True, default=None, blank=True)
