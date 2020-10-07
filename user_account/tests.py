@@ -1,15 +1,18 @@
+"""Test module of user_account app"""
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 
 
 class IndexPageTest(TestCase):
+    """Tests if redirect in case of none user"""
     def test_index_page_user_not_authenticated(self):
         response = self.client.get(reverse("user_account"))
         self.assertEqual(response.status_code, 302)
 
 
 class SignUpTest(TestCase):
+    """Tests if sign_in page responds"""
     def test_sign_up(self):
         response = self.client.get("/user_account/sign_in")
         self.assertEqual(response.status_code, 200)
@@ -29,6 +32,7 @@ class SignUpTest(TestCase):
 
 
 class LoginTest(TestCase):
+    """Tests if login works"""
     def setUp(self):
         fake_user = User.objects.create(
             username="Vincent74", password="Openclassrooms1"

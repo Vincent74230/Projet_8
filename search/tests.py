@@ -1,3 +1,4 @@
+"""Search app test module"""
 from django.test import TestCase
 from django.urls import reverse
 from .models import Products
@@ -8,11 +9,15 @@ from unittest import mock
 
 
 class ExtractCustomCommandTest(TestCase):
+    """Test of custom command 'extract' the fetches products on Openfoodfacts
+    application"""
     class MockRequestGet:
+        """Mock of request.get to OFF API"""
         def __init__(self, url, params=None, headers=None):
             self.status_code = 200
 
         def json(self):
+            """Mocks the response of OFF API"""
             return {
                 "products": [
                     {
@@ -48,6 +53,7 @@ class ExtractCustomCommandTest(TestCase):
 
     @mock.patch("search.management.commands.extract.requests.get", MockRequestGet)
     def test_extract(self):
+        """Launching of extract test"""
         call_command("extract")
         total = Products.objects.all()
         self.assertEqual(3, len(total))
@@ -56,6 +62,7 @@ class ExtractCustomCommandTest(TestCase):
 
 
 class SearchIndexPageTestCase(TestCase):
+    """Tests of search main page display"""
     def test_search_index_view(self):
         response = self.client.get(reverse("search_index"))
         self.assertEqual(response.status_code, 200)
@@ -69,6 +76,7 @@ class SearchIndexPageTestCase(TestCase):
 
 
 class SearchFavouriteTestCase(TestCase):
+    """Tests of user's favourites retrieving""" 
     def setUp(self):
         fake_user = User.objects.create_user(
             username="Vincent74230",
@@ -91,7 +99,9 @@ class SearchFavouriteTestCase(TestCase):
 
 
 class SearchRegisterSubstituteTestCase(TestCase):
+    """Tests of user's favourites register in DB"""
     def setUp(self):
+        """Just a mock of a fake user and product"""
         fake_user = User.objects.create_user(
             username="VincentTest",
             password="Testpassword2",

@@ -1,3 +1,4 @@
+"""Contains functions of user_account app"""
 from django.shortcuts import render, redirect
 from .forms import RegisterForm
 from django.contrib.auth import authenticate, login, logout
@@ -6,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
+    """If user is logged in, shows user_account index page"""
     context = {}
     if request.user.is_authenticated:
         return render(request, "user_account/index.html", context)
@@ -14,6 +16,7 @@ def index(request):
 
 
 def register_page(request):
+    """Checks user creation form conformity"""
     Registration = RegisterForm()
     if request.method == "POST":
         Registration = RegisterForm(request.POST)
@@ -28,6 +31,7 @@ def register_page(request):
 
 
 def login_page(request):
+    """Login page, checks username and password"""
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -46,5 +50,6 @@ def login_page(request):
 
 @login_required
 def logoutUser(request):
+    """Logout function, login required"""
     logout(request)
     return redirect("login")

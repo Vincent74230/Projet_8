@@ -1,3 +1,4 @@
+"""Contains urls paths of ser_account app"""
 from django.urls import path
 from . import views
 
