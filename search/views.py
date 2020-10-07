@@ -43,12 +43,14 @@ def detail(request, UserChoice):
 
 @login_required
 def register_substitute(request, UserChoice):
-    user = User.objects.filter(id=request.user.id)
-    user = user[0]
-    favourite_product = Products.objects.filter(barcode=UserChoice)
-    favourite_product = favourite_product[0]
-    favourite_product.favourites.add(user)
-    return render(request, 'search/register_fav_ok.html', {})
+    try:
+        favourite_product = Products.objects.filter(barcode=UserChoice)
+        favourite_product = favourite_product[0]
+        favourite_product.favourites.add(request.user.id)
+        return render(request, 'search/register_fav_ok.html', {})
+    except:
+        raise Http404("Le produit demandé n'existe pas")
+
 
 @login_required
 def favourites(request):

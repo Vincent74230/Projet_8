@@ -49,12 +49,20 @@ class ExtractCustomCommandTest(TestCase):
         self.assertEqual('Coca-Cola', total[0].name)
         self.assertEqual(None, total[2].image)
 
-class SearchTestIndexPage(TestCase):
+class SearchIndexPageTestCase(TestCase):
     def test_search_index_view(self):
         response=self.client.get(reverse('search_index'))
         self.assertEqual(response.status_code, 200)
 
-class FavouriteTestPage(TestCase):
+    def test_search_index_user_question_post(self):
+        response=self.client.post(reverse('search_index'), {
+            'UserQuestion':'nutella'
+            })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "substitut")
+
+
+class SearchFavouriteTestCase(TestCase):
     def setUp(self):
         fake_user = User.objects.create_user(
             username='Vincent74230',
@@ -64,12 +72,13 @@ class FavouriteTestPage(TestCase):
             email='vince@gmail.com'
             )
         fake_user.save()
-
-    def test_favourite_page_anonymous_user(self):
-        response=self.client.get(reverse("search_favourites"))
-        self.assertEqual(response.status_code, 404)
-
-    def test_favourite_page_user_is_connected(self):
         self.client.login(username='Vincent74230', password='Testpassword1')
+        
+    def test_favourite_page_user_is_connected(self):
         response = self.client.get(reverse("search_favourites"))
         self.assertEqual(response.status_code, 200)
+
+    def test_favourite_page_anonymous_user(self):
+        self.client.logout()
+        response = self.client.get(reverse("search_favourites"))
+        self.assertEqual(response.status_code, 302)
