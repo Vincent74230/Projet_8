@@ -10,7 +10,7 @@ from unittest import mock
 
 class ExtractCustomCommandTest(TestCase):
     """Test of custom command 'extract' the fetches products on Openfoodfacts
-    application"""
+    application and logs on DB"""
     class MockRequestGet:
         """Mock of request.get to OFF API"""
         def __init__(self, url, params=None, headers=None):
@@ -115,6 +115,7 @@ class SearchRegisterSubstituteTestCase(TestCase):
             name="Orangina",
             nutriscore="e",
         )
+        fake_product.save()
         self.client.login(username="VincentTest", password="Testpassword2")
 
     def test_register_sub_right_user_no_product(self):
@@ -133,3 +134,27 @@ class SearchRegisterSubstituteTestCase(TestCase):
         self.client.logout()
         response = self.client.get("/search/register_sub/3560070824458")
         self.assertEqual(response.status_code, 302)
+
+class DetailViewTestCase(TestCase):
+    """Tests of the detail view of a product"""
+    def setUp(self):
+        fake_product = Products.objects.create(
+            barcode="3560070824458",
+            image="https://static.openfoodfacts.org/images/products/500/015/940/7236/front_fr.19.100.jpg",
+            category="Sodas",
+            name="Orangina",
+            nutriscore="e",
+        )
+        fake_product.save()
+
+    def test_detail_view_right_product(self):
+        response = self.client.get("/search/detail/'3560070824458'")
+        self.assertEqual(response.status_code, 301)
+
+    def test_detail_view_no_product(self):
+        response = self.client.get("/search/detail/")
+        self.assertEqual(response.status_code, 404)
+
+    def test_detail_view_wrong_product(self):
+        response = self.client.get("/search/detail/'21487'")
+        self.assertEqual(response.status_code, 301)

@@ -1,3 +1,4 @@
+"""Biggest app of project: contains search algorithm"""
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -7,6 +8,7 @@ import openfoodfacts
 
 
 def index(request):
+    """Algorithm that fetches substitutes"""
     context = {}
     if request.method == "POST":
         user_question = request.POST.get("UserQuestion")
@@ -17,9 +19,9 @@ def index(request):
             result = result[0]
             categories = result.category
             cat = categories.split(",")
-            cat = cat[-1]
+            cat = cat[-1]#We pick substitutes on the last tag of 'categories'
             substitutes = Products.objects.filter(category__icontains=cat)
-            for nutriscore in nutriscores:
+            for nutriscore in nutriscores:#We make a list with best substitues ahead
                 sub = substitutes.filter(nutriscore=nutriscore)
                 for element in sub:
                     substitutes_list.append(element)
@@ -36,6 +38,7 @@ def index(request):
 
 
 def detail(request, UserChoice):
+    """Displays a products specifications"""
     product = get_object_or_404(Products, barcode=UserChoice)
     try:
         infos = openfoodfacts.products.get_product(UserChoice)
@@ -49,6 +52,7 @@ def detail(request, UserChoice):
 
 @login_required
 def register_substitute(request, UserChoice):
+    """Log favourite on user account, uses many-to-many field in Products model"""
     try:
         favourite_product = Products.objects.filter(barcode=UserChoice)
         favourite_product = favourite_product[0]
@@ -60,6 +64,7 @@ def register_substitute(request, UserChoice):
 
 @login_required
 def favourites(request):
+    """fetches user's favourites, returns a list"""
     fav = Products.objects.filter(favourites=request.user.id)
     user_favourites = []
     for element in fav:

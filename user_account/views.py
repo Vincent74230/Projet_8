@@ -35,10 +35,10 @@ def login_page(request):
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password)#check if user is in DB
         if user is not None:
             login(request, user)
-            return redirect("/")
+            return redirect("/")#redirect to homepage
         else:
             messages.info(
                 request, "Votre nom d'utilisateur ou mote de passe est incorrect"

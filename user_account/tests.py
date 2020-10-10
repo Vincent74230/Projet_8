@@ -18,6 +18,7 @@ class SignUpTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_sign_in_post(self):
+        """Tests if usercreationform is ok"""
         response = self.client.post(
             "/user_account/sign_in",
             {
